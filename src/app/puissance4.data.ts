@@ -23,3 +23,16 @@ export function similarBoard(a: Board, b: Board): boolean {
       && !a.data.find( (LA, i) => LA.find( (v, j) => v !== b.data[i][i]) );
 }
 
+
+/**
+ * Interface for Puissance4
+ */
+export type initReturns   = {error: undefined, board: Board} | {error: 'invalid magnitudes'} | {error: 'invalid data'};
+export type playReturns   = {success: Board} | {error: 'out of range' | 'not your turn' | 'column is full'};
+export type winnerReturns = Token | 'NONE';
+export interface Puissance4Interface {
+  readonly board: Board;
+  init(board: Board): initReturns;
+  play(token: Token, column: number): playReturns;
+  winner(nb: number): winnerReturns;
+}

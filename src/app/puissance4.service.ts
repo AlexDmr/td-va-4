@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Board, emptyBoard, Token } from './puissance4.data';
+import { Board, emptyBoard, initReturns, playReturns, Puissance4Interface, Token, winnerReturns } from './puissance4.data';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Puissance4Service {
+export class Puissance4Service implements Puissance4Interface {
   private _board: Board = emptyBoard;
 
   /** The current board managed by the service \
@@ -24,7 +24,7 @@ export class Puissance4Service {
    * @returns \{error: 'invalid magnitudes'} if width or height are not valid magnitude (i.e. strictly positive integers)
    * @returns \{error: 'invalid data'} the data contains invalid number of tokens (#RED should be equals to #YELLOW or #YELLOW+1)
    */
-  init(board: Board): {error: undefined, board: Board} | {error: 'invalid magnitudes'} | {error: 'invalid data'} {
+  init(board: Board): initReturns {
     if (board.width > 0 && board.height > 0 && Number.isInteger(board.width) && Number.isInteger(board.height) ) {
       // Checking data validity
       const {data: D, width: W, height: H} = board;
@@ -47,7 +47,8 @@ export class Puissance4Service {
   }
 
   /**
-   *
+   * Play token at column \
+   * PRECONDITION : the board is correct.
    * @param token The token to play
    * @param column The column where to play, must be an integer
    * @returns \{success: the new board} with token t at column in case of success. The new board is then set to the board attribute
@@ -55,16 +56,17 @@ export class Puissance4Service {
    * @returns \{error: 'not your turn'} As RED begins, then #RED should be equals to #YELLOW or #YELLOW + 1.
    * @returns \{error: 'column is full'} in case column is ALREADY full.
    */
-  play(token: Token, column: number): {success: Board} | {error: 'out of range' | 'not your turn' | 'column is full'} {
+  play(token: Token, column: number): playReturns {
     return {success: this._board}
   }
 
   /**
-   * Identify who is the winner, if there is any. NONE otherweise.
+   * Identify who is the winner, if there is any. NONE otherweise. \
+   * PRECONDITION : the board is correct.
    * @param nb Minimal number of token that have to be aligned (in any of 8 directions) to declare a winner
    * @returns the token of the winner if any, NONE otherweise
    */
-  winner(nb: number): Token | 'NONE' {
+  winner(nb: number): winnerReturns {
     return 'NONE';
   }
 }
